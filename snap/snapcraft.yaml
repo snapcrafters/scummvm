@@ -1,5 +1,6 @@
 name: scummvm
-version: '2.0.0'
+version: stable
+version-script: git -C parts/scummvm/src describe --tags
 summary: ScummVM
 description: |
     ScummVM is a program which allows you to run certain classic graphical
@@ -18,7 +19,15 @@ apps:
 parts:
   scummvm:
     source: https://github.com/scummvm/scummvm.git
-    source-tag: 'v2.0.0'
+    prepare: |
+      last_committed_tag="$(git describe --tags --abbrev=0)"
+      last_released_tag="$(snap info scummvm | awk '$1 == "beta:" { print $2 }')"
+      # If the latest tag from the upstream project has not been released to
+      # beta, build that tag instead of master.
+      if [ "${last_committed_tag}" != "${last_released_tag}" ]; then
+        git fetch
+        git checkout "${last_committed_tag}"
+      fi    
     plugin: autotools
 #    To do a quick test build
 #    configflags:
