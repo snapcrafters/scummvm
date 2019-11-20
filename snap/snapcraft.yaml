@@ -1,6 +1,6 @@
 name: scummvm
-version: stable
-version-script: git -C parts/scummvm/src describe --tags | sed 's/desc\///'
+base: core18
+adopt-info: scummvm
 summary: ScummVM
 description: |
     ScummVM is a program which allows you to run certain classic graphical
@@ -30,6 +30,7 @@ parts:
         git checkout "${last_committed_tag}"
       fi    
       snapcraftctl build
+      snapcraftctl set-version $(git -C ../src describe --tags | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
     plugin: autotools
 #    To do a quick test build
 #    configflags:
@@ -45,7 +46,7 @@ parts:
       - libvorbis-dev
       - libflac-dev
       - libmad0-dev
-      - libpng12-dev
+      - libpng-dev
       - libtheora-dev
       - libfaad-dev
       - libfluidsynth-dev
@@ -53,7 +54,7 @@ parts:
       - zlib1g-dev
       - libunity-dev
     stage-packages:
-      - libicu55
+      - libicu60
       - libasound2
       - libc6
       - libfaad2
@@ -66,7 +67,7 @@ parts:
       - libmad0
       - libmpeg2-4
       - libogg0
-      - libpng12-0
+      - libpng16-16
       - libsdl1.2debian
       - libsndio6.1
       - libstdc++6
@@ -74,3 +75,10 @@ parts:
       - libvorbis0a
       - libvorbisfile3
       - zlib1g
+      - libdbusmenu-glib4
+      - libdee-1.0-4
+      - libglu1-mesa
+      - libslang2
+      - libunity-protocol-private0
+      - libunity9
+      - freeglut3
