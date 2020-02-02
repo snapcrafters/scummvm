@@ -13,11 +13,12 @@ grade: stable
 
 apps:
   scummvm:
-    command: scummvm
+    command: desktop-launch $SNAP/bin/scummvm
     plugs: [x11, home, pulseaudio, unity7, opengl]
 
 parts:
   scummvm:
+    after: [desktop-glib-only]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git describe --tags --abbrev=0)"
@@ -39,7 +40,7 @@ parts:
     build-packages:
       - g++
       - make
-      - libsdl1.2-dev
+      - libsdl2-dev
       - libjpeg62-dev
       - libmpeg2-4-dev
       - libogg-dev
@@ -56,7 +57,6 @@ parts:
     stage-packages:
       - libicu60
       - libasound2
-      - libc6
       - libfaad2
       - libflac8
       - libfluidsynth1
@@ -68,7 +68,7 @@ parts:
       - libmpeg2-4
       - libogg0
       - libpng16-16
-      - libsdl1.2debian
+      - libsdl2-2.0-0
       - libsndio6.1
       - libstdc++6
       - libtheora0
@@ -82,3 +82,13 @@ parts:
       - libunity-protocol-private0
       - libunity9
       - freeglut3
+
+  desktop-glib-only:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    plugin: make
+    build-packages:
+      - libglib2.0-dev
+    stage-packages:
+      - libglib2.0-bin
+
