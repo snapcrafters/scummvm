@@ -54,6 +54,8 @@ parts:
       - libfreetype6-dev
       - zlib1g-dev
       - libunity-dev
+      - libcurl4-openssl-dev
+      - libsdl2-net-dev
     stage-packages:
       - libicu60
       - libasound2
@@ -82,6 +84,9 @@ parts:
       - libunity-protocol-private0
       - libunity9
       - freeglut3
+      - libcurl4
+      - libsdl2-net-2.0-0
+      - liba52-0.7.4
 
   desktop-glib-only:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
