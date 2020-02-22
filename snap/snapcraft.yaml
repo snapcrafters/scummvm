@@ -33,10 +33,15 @@ parts:
       snapcraftctl build
       snapcraftctl set-version $(git -C ../src describe --tags | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
     plugin: autotools
+    configflags:
+      - --enable-release
+      - --disable-debug
+
 #    To do a quick test build
 #    configflags:
 #      - --disable-all-engines
 #      - --enable-engine=scumm
+
     build-packages:
       - g++
       - make
