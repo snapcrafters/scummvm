@@ -14,7 +14,7 @@ grade: stable
 apps:
   scummvm:
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, home, pulseaudio, unity7, opengl]
+    plugs: [x11, home, pulseaudio, unity7, opengl, network]
 
 parts:
   scummvm:
