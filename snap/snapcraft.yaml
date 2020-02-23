@@ -14,14 +14,14 @@ grade: stable
 apps:
   scummvm:
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, home, pulseaudio, unity7, opengl]
+    plugs: [x11, home, pulseaudio, audio-playback, unity7, opengl, network, removable-media]
 
 parts:
   scummvm:
     after: [desktop-glib-only]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
-      last_committed_tag="$(git describe --tags --abbrev=0)"
+      last_committed_tag="$(git tag --list | tac | head -n1)"
       trimmed_tag="$(echo $last_committed_tag | sed 's/desc\///' | sed 's/git//' )"
       last_released_tag="$(snap info scummvm | awk '$1 == "beta:" { print $2 }')"
       # If the latest tag from the upstream project has not been released to
@@ -31,12 +31,17 @@ parts:
         git checkout "${last_committed_tag}"
       fi    
       snapcraftctl build
-      snapcraftctl set-version $(git -C ../src describe --tags | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
+      snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
     plugin: autotools
+    configflags:
+      - --enable-release
+      - --disable-debug
+
 #    To do a quick test build
 #    configflags:
 #      - --disable-all-engines
 #      - --enable-engine=scumm
+
     build-packages:
       - g++
       - make
@@ -54,6 +59,8 @@ parts:
       - libfreetype6-dev
       - zlib1g-dev
       - libunity-dev
+      - libcurl4-openssl-dev
+      - libsdl2-net-dev
     stage-packages:
       - libicu60
       - libasound2
@@ -82,6 +89,9 @@ parts:
       - libunity-protocol-private0
       - libunity9
       - freeglut3
+      - libcurl4
+      - libsdl2-net-2.0-0
+      - liba52-0.7.4
 
   desktop-glib-only:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
