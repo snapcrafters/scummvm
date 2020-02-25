@@ -8,6 +8,15 @@ description: |
     files. The clever part about this: ScummVM just replaces the executables
     shipped with the game, allowing you to play them on systems for which
     they were never designed!
+
+    Currently, ScummVM supports a huge library of adventures with over
+    250 games in total.
+    
+    It supports many classics published by legendary studios like LucasArts,
+    Sierra On-Line, Revolution Software, Cyan, Inc. and Westwood Studios.
+    Next to ground-breaking titles like the Monkey Island series,
+    Broken Sword, Myst, Blade Runner and countless other games,
+    you will find some really obscure adventures and truly hidden gems to explore.
 confinement: strict
 grade: stable
 
