@@ -25,7 +25,7 @@ apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, home, alsa, audio-playback, unity7, opengl, network, network-bind, removable-media]
+    plugs: [x11, wayland, home, alsa, audio-playback, unity7, opengl, network, network-bind, removable-media]
 
 parts:
   scummvm:
@@ -83,6 +83,8 @@ parts:
       - libfluidsynth1
       - libgl1-mesa-dri
       - libgl1-mesa-glx
+      - libglu1-mesa
+      - libwayland-egl1-mesa
       - libjpeg62
       - libjpeg8
       - libmad0
@@ -98,7 +100,6 @@ parts:
       - zlib1g
       - libdbusmenu-glib4
       - libdee-1.0-4
-      - libglu1-mesa
       - libslang2
       - libunity-protocol-private0
       - libunity9
