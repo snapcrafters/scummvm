@@ -67,7 +67,6 @@ parts:
       - libsdl2-net-dev
     stage-packages:
       - libicu60
-      - libasound2
       - libfaad2
       - libflac8
       - libfluidsynth1
