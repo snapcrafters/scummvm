@@ -49,6 +49,7 @@ parts:
     plugin: autotools
     configflags:
       - --enable-release
+      - --enable-opl2lpt
       - --disable-debug
 
 #    To do a quick test build
@@ -76,6 +77,7 @@ parts:
       - libunity-dev
       - libcurl4-openssl-dev
       - libsdl2-net-dev
+      - libieee1284-3-dev
     stage-packages:
       - libicu60
       - libfaad2
@@ -107,6 +109,7 @@ parts:
       - libcurl4
       - libsdl2-net-2.0-0
       - liba52-0.7.4
+      - libieee1284-3
       - locales-all
 
   alsa-mixin:
