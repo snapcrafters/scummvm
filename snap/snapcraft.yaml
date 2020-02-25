@@ -13,12 +13,13 @@ grade: stable
 
 apps:
   scummvm:
+    command-chain: ["snap/command-chain/alsa-launch"]
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, home, pulseaudio, audio-playback, unity7, opengl, network, network-bind, removable-media]
+    plugs: [x11, home, alsa, pulseaudio, audio-playback, unity7, opengl, network, network-bind, removable-media]
 
 parts:
   scummvm:
-    after: [desktop-glib-only]
+    after: [alsa-mixin, desktop-glib-only]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
@@ -92,6 +93,63 @@ parts:
       - libcurl4
       - libsdl2-net-2.0-0
       - liba52-0.7.4
+
+  alsa-mixin:
+    plugin: nil
+    source: https://github.com/diddlesnaps/snapcraft-alsa.git
+    override-pull: |
+      cat > asound.conf <<EOF
+      pcm.!default {
+          type pulse
+          fallback "sysdefault"
+          hint {
+              show on
+              description "Default ALSA Output (currently PulseAudio Sound Server)"
+          }
+      }
+      ctl.!default {
+          type pulse
+          fallback "sysdefault"
+      }
+      seq.default {
+          type hw
+      }
+      seq.hw {
+          type hw
+      }
+      EOF
+      cat > alsa-launch <<EOF
+      #!/bin/bash
+      export ALSA_CONFIG_PATH="\$SNAP/etc/asound.conf"
+
+      if [ -d "\$SNAP/usr/lib/alsa-lib" ]; then
+          export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/alsa-lib"
+      elif [ -d "\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib" ]; then
+          export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib"
+      fi
+      export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+
+      # Make PulseAudio socket available inside the snap-specific \$XDG_RUNTIME_DIR
+      if [ -n "\$XDG_RUNTIME_DIR" ]; then
+          pulsenative="pulse/native"
+          pulseaudio_sockpath="\$XDG_RUNTIME_DIR/../\$pulsenative"
+          if [ -S "\$pulseaudio_sockpath" ]; then
+              export PULSE_SERVER="unix:\${pulseaudio_sockpath}"
+          fi
+      fi
+
+      exec "\$@"
+      EOF
+      chmod +x alsa-launch
+    override-build: |
+      snapcraftctl build
+      install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc asound.conf
+      install -m755 -D -t $SNAPCRAFT_PART_INSTALL/snap/command-chain alsa-launch
+    build-packages:
+      - libasound2-dev
+    stage-packages:
+      - libasound2
+      - libasound2-plugins
 
   desktop-glib-only:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
