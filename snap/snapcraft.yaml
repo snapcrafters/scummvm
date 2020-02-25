@@ -1,5 +1,6 @@
 name: scummvm
 base: core18
+license: GPL-2.0
 adopt-info: scummvm
 summary: ScummVM
 description: |
