@@ -62,6 +62,7 @@ parts:
       - libsdl2-dev
       - libjpeg62-dev
       - libmpeg2-4-dev
+      - liba52-dev
       - libogg-dev
       - libvorbis-dev
       - libflac-dev
