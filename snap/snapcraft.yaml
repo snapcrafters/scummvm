@@ -1,5 +1,6 @@
 name: scummvm
 base: core18
+license: GPL-2.0
 adopt-info: scummvm
 summary: ScummVM
 description: |
@@ -8,33 +9,57 @@ description: |
     files. The clever part about this: ScummVM just replaces the executables
     shipped with the game, allowing you to play them on systems for which
     they were never designed!
+
+    Currently, ScummVM supports a huge library of adventures with over
+    250 games in total.
+    
+    It supports many classics published by legendary studios like LucasArts,
+    Sierra On-Line, Revolution Software, Cyan, Inc. and Westwood Studios.
+    Next to ground-breaking titles like the Monkey Island series,
+    Broken Sword, Myst, Blade Runner and countless other games,
+    you will find some really obscure adventures and truly hidden gems to explore.
 confinement: strict
 grade: stable
 
 apps:
   scummvm:
+    command-chain: ["snap/command-chain/alsa-launch"]
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, home, pulseaudio, audio-playback, unity7, opengl, network, network-bind, removable-media]
+    plugs:
+      - x11
+      - wayland
+      - unity7
+      - opengl
+      - alsa
+      - audio-playback
+      - home
+      - network
+      - network-bind
+      - removable-media
 
 parts:
   scummvm:
-    after: [desktop-glib-only]
+    after: [alsa-mixin, desktop-glib-only]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
-      trimmed_tag="$(echo $last_committed_tag | sed 's/desc\///' | sed 's/git//' )"
+      trimmed_tag="$(echo $last_committed_tag | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')"
       last_released_tag="$(snap info scummvm | awk '$1 == "beta:" { print $2 }')"
       # If the latest tag from the upstream project has not been released to
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
         git fetch
         git checkout "${last_committed_tag}"
+        snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
+      else
+        snapcraftctl set-version $(git -C ../src describe | sed 's/desc\///')
       fi    
       snapcraftctl build
-      snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
+      
     plugin: autotools
     configflags:
       - --enable-release
+      - --enable-opl2lpt
       - --disable-debug
 
 #    To do a quick test build
@@ -48,6 +73,7 @@ parts:
       - libsdl2-dev
       - libjpeg62-dev
       - libmpeg2-4-dev
+      - liba52-dev
       - libogg-dev
       - libvorbis-dev
       - libflac-dev
@@ -61,14 +87,16 @@ parts:
       - libunity-dev
       - libcurl4-openssl-dev
       - libsdl2-net-dev
+      - libieee1284-3-dev
     stage-packages:
       - libicu60
-      - libasound2
       - libfaad2
       - libflac8
       - libfluidsynth1
       - libgl1-mesa-dri
       - libgl1-mesa-glx
+      - libglu1-mesa
+      - libwayland-egl1-mesa
       - libjpeg62
       - libjpeg8
       - libmad0
@@ -84,7 +112,6 @@ parts:
       - zlib1g
       - libdbusmenu-glib4
       - libdee-1.0-4
-      - libglu1-mesa
       - libslang2
       - libunity-protocol-private0
       - libunity9
@@ -92,6 +119,65 @@ parts:
       - libcurl4
       - libsdl2-net-2.0-0
       - liba52-0.7.4
+      - libieee1284-3
+      - locales-all
+
+  alsa-mixin:
+    plugin: nil
+    source: https://github.com/diddlesnaps/snapcraft-alsa.git
+    override-pull: |
+      cat > asound.conf <<EOF
+      pcm.!default {
+          type pulse
+          fallback "sysdefault"
+          hint {
+              show on
+              description "Default ALSA Output (currently PulseAudio Sound Server)"
+          }
+      }
+      ctl.!default {
+          type pulse
+          fallback "sysdefault"
+      }
+      seq.default {
+          type hw
+      }
+      seq.hw {
+          type hw
+      }
+      EOF
+      cat > alsa-launch <<EOF
+      #!/bin/bash
+      export ALSA_CONFIG_PATH="\$SNAP/etc/asound.conf"
+
+      if [ -d "\$SNAP/usr/lib/alsa-lib" ]; then
+          export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/alsa-lib"
+      elif [ -d "\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib" ]; then
+          export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib"
+      fi
+      export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+
+      # Make PulseAudio socket available inside the snap-specific \$XDG_RUNTIME_DIR
+      if [ -n "\$XDG_RUNTIME_DIR" ]; then
+          pulsenative="pulse/native"
+          pulseaudio_sockpath="\$XDG_RUNTIME_DIR/../\$pulsenative"
+          if [ -S "\$pulseaudio_sockpath" ]; then
+              export PULSE_SERVER="unix:\${pulseaudio_sockpath}"
+          fi
+      fi
+
+      exec "\$@"
+      EOF
+      chmod +x alsa-launch
+    override-build: |
+      snapcraftctl build
+      install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc asound.conf
+      install -m755 -D -t $SNAPCRAFT_PART_INSTALL/snap/command-chain alsa-launch
+    build-packages:
+      - libasound2-dev
+    stage-packages:
+      - libasound2
+      - libasound2-plugins
 
   desktop-glib-only:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
