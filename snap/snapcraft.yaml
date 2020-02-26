@@ -25,7 +25,17 @@ apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
     command: desktop-launch $SNAP/bin/scummvm
-    plugs: [x11, wayland, home, alsa, audio-playback, unity7, opengl, network, network-bind, removable-media]
+    plugs:
+      - x11
+      - wayland
+      - unity7
+      - opengl
+      - alsa
+      - audio-playback
+      - home
+      - network
+      - network-bind
+      - removable-media
 
 parts:
   scummvm:
