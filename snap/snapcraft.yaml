@@ -37,6 +37,10 @@ apps:
       - network-bind
       - removable-media
 
+layout:
+  /usr/share/glvnd/egl_vendor.d:
+    bind: $SNAP/usr/share/glvnd/egl_vendor.d
+
 parts:
   scummvm:
     after: [alsa-mixin, desktop-glib-only]
