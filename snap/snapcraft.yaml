@@ -24,7 +24,7 @@ grade: stable
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
-    command: desktop-launch $SNAP/bin/scummvm
+    command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
     plugs:
       - x11
       - wayland
@@ -192,3 +192,6 @@ parts:
     stage-packages:
       - libglib2.0-bin
 
+  wayland-if-possible:
+    plugin: dump
+    source: wayland
