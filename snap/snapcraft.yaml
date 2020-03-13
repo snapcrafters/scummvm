@@ -27,19 +27,34 @@ apps:
     command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
     plugs:
       - x11
-      - wayland
       - unity7
-      - opengl
-      - alsa
-      - audio-playback
       - home
-      - network
-      - network-bind
-      - removable-media
+
+  daemon:
+    command-chain: ["snap/command-chain/alsa-launch"]
+    command: daemon-start.sh $SNAP/bin/scummvm -f
+    environment:
+      SDL_VIDEODRIVER: wayland
+      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/"
+    daemon: simple
+    restart-condition: always
+
+plugs:
+  wayland:
+  opengl:
+  alsa:
+  audio-playback:
+  network:
+  network-bind:
+  removable-media:
 
 layout:
   /usr/share/glvnd/egl_vendor.d:
     bind: $SNAP/usr/share/glvnd/egl_vendor.d
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+  /usr/share/X11/xkb:
+    bind: $SNAP/usr/share/X11/xkb
 
 parts:
   scummvm:
@@ -192,6 +207,6 @@ parts:
     stage-packages:
       - libglib2.0-bin
 
-  wayland-if-possible:
+  scripts:
     plugin: dump
-    source: wayland
+    source: scripts
