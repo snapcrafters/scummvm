@@ -75,7 +75,7 @@ layout:
 
 parts:
   scummvm:
-    after: [alsa-mixin, desktop-gtk]
+    after: [alsa-mixin, desktop-gtk, gtk-locales]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
@@ -235,6 +235,21 @@ parts:
       - xdg-user-dirs
       - libcanberra-gtk3-module
       - libgdk-pixbuf2.0-0
+
+  gtk-locales:
+    plugin: nil
+    build-packages:
+      - apt
+      - dpkg
+    override-pull: |
+      set -eux
+      apt download "language-pack-gnome-*-base"
+    override-build: |
+      set -eux
+      for deb in *.deb; do dpkg-deb -x $deb .; done
+      find usr/share/locale-langpack -type f -not -name "gtk20*.mo" -and -not -name "gtk30*.mo" -exec rm '{}' \;
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share
+      cp -R usr/share/locale-langpack $SNAPCRAFT_PART_INSTALL/usr/share/
 
   scripts:
     plugin: dump
