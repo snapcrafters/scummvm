@@ -48,6 +48,23 @@ plugs:
   network-bind:
   removable-media:
 
+  gtk-3-themes:
+    default-provider: gtk-common-themes:gtk-3-themes
+    interface: content
+    target: $SNAP/data-dir/themes
+  sound-themes:
+    default-provider: gtk-common-themes:sound-themes
+    interface: content
+    target: $SNAP/data-dir/sounds
+  gnome-3-28-1804:
+    default-provider: gnome-3-28-1804:gnome-3-28-1804
+    interface: content
+    target: $SNAP/gnome-platform
+  icon-themes:
+    default-provider: gtk-common-themes:icon-themes
+    interface: content
+    target: $SNAP/data-dir/icons
+
 layout:
   /usr/share/glvnd/egl_vendor.d:
     bind: $SNAP/usr/share/glvnd/egl_vendor.d
@@ -58,7 +75,7 @@ layout:
 
 parts:
   scummvm:
-    after: [alsa-mixin, desktop-glib-only]
+    after: [alsa-mixin, desktop-gtk]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
@@ -90,6 +107,7 @@ parts:
       - g++
       - make
       - libsdl2-dev
+      - libgtk-3-dev
       - libjpeg62-dev
       - libmpeg2-4-dev
       - liba52-dev
@@ -198,14 +216,25 @@ parts:
       - libasound2
       - libasound2-plugins
 
-  desktop-glib-only:
+  desktop-gtk:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: glib-only
+    source-subdir: gtk
     plugin: make
     build-packages:
-      - libglib2.0-dev
+      - build-essential
+
     stage-packages:
-      - libglib2.0-bin
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - locales-all
+      - xdg-user-dirs
+      - libcanberra-gtk3-module
+      - libgdk-pixbuf2.0-0
 
   scripts:
     plugin: dump
