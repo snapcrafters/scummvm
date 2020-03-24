@@ -48,6 +48,7 @@ plugs:
   network-bind:
   removable-media:
   gsettings:
+  mount-observe:
   gtk-3-themes:
     default-provider: gtk-common-themes:gtk-3-themes
     interface: content
