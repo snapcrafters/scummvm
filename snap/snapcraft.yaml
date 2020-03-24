@@ -47,7 +47,7 @@ plugs:
   network:
   network-bind:
   removable-media:
-
+  gsettings:
   gtk-3-themes:
     default-provider: gtk-common-themes:gtk-3-themes
     interface: content
