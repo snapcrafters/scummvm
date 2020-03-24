@@ -21,34 +21,7 @@ description: |
 confinement: strict
 grade: stable
 
-apps:
-  scummvm:
-    command-chain: ["snap/command-chain/alsa-launch"]
-    command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
-    plugs:
-      - x11
-      - unity7
-      - home
-
-  daemon:
-    command-chain: ["snap/command-chain/alsa-launch"]
-    command: daemon-start.sh $SNAP/bin/scummvm -f
-    environment:
-      SDL_VIDEODRIVER: wayland
-      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/"
-    daemon: simple
-    restart-condition: always
-
 plugs:
-  wayland:
-  opengl:
-  alsa:
-  audio-playback:
-  network:
-  network-bind:
-  removable-media:
-  gsettings:
-  mount-observe:
   gtk-3-themes:
     default-provider: gtk-common-themes:gtk-3-themes
     interface: content
@@ -65,6 +38,33 @@ plugs:
     default-provider: gtk-common-themes:icon-themes
     interface: content
     target: $SNAP/data-dir/icons
+
+apps:
+  scummvm:
+    command-chain: ["snap/command-chain/alsa-launch"]
+    command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
+    plugs:
+      - x11
+      - unity7
+      - wayland
+      - home
+      - opengl
+      - alsa
+      - audio-playback
+      - network
+      - network-bind
+      - removable-media
+      - gsettings
+      - mount-observe
+
+  daemon:
+    command-chain: ["snap/command-chain/alsa-launch"]
+    command: daemon-start.sh $SNAP/bin/scummvm -f
+    environment:
+      SDL_VIDEODRIVER: wayland
+      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/"
+    daemon: simple
+    restart-condition: always
 
 layout:
   /usr/share/glvnd/egl_vendor.d:
