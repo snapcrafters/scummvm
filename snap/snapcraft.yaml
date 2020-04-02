@@ -24,20 +24,23 @@ grade: stable
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
-    command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
+    command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh
     plugs:
       - x11
       - unity7
       - home
 
   daemon:
-    command-chain: ["snap/command-chain/alsa-launch"]
-    command: daemon-start.sh $SNAP/bin/scummvm -f
-    environment:
-      SDL_VIDEODRIVER: wayland
-      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/"
+    command: daemon-start.sh $SNAP/bin/scummvm-launch.sh -f
     daemon: simple
     restart-condition: always
+    plugs:
+      - pulseaudio
+    environment:
+      SDL_VIDEODRIVER: wayland
+      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/"
+      PULSE_SYSTEM: 1
+      PULSE_RUNTIME_PATH: /var/run/pulse
 
 plugs:
   wayland:
@@ -55,6 +58,12 @@ layout:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
   /usr/share/X11/xkb:
     bind: $SNAP/usr/share/X11/xkb
+  /usr/share/scummvm:
+    bind: $SNAP/usr/share/scummvm
+  /usr/share/applications:
+    bind: $SNAP/usr/share/applications
+  /usr/share/alsa:
+    bind: $SNAP/usr/share/alsa
 
 parts:
   scummvm:
@@ -210,3 +219,16 @@ parts:
   scripts:
     plugin: dump
     source: scripts
+
+  games:
+    plugin: nil
+    stage-packages:
+      - beneath-a-steel-sky
+      - flight-of-the-amazon-queen
+      - lure-of-the-temptress
+      # - drascula "WARNING: Incorrect version of the 'drascula.dat' engine data file found. Expected 5.0 but got 4.0.!"
+
+  # drascula from 20.04
+  drascula:
+    plugin: dump
+    source: http://archive.ubuntu.com/ubuntu/pool/universe/d/drascula/drascula_1.0+ds4-1_all.deb
