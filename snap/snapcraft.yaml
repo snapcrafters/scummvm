@@ -21,28 +21,11 @@ description: |
 confinement: strict
 grade: stable
 
-plugs:
-  gtk-3-themes:
-    default-provider: gtk-common-themes:gtk-3-themes
-    interface: content
-    target: $SNAP/data-dir/themes
-  sound-themes:
-    default-provider: gtk-common-themes:sound-themes
-    interface: content
-    target: $SNAP/data-dir/sounds
-  gnome-3-28-1804:
-    default-provider: gnome-3-28-1804:gnome-3-28-1804
-    interface: content
-    target: $SNAP/gnome-platform
-  icon-themes:
-    default-provider: gtk-common-themes:icon-themes
-    interface: content
-    target: $SNAP/data-dir/icons
-
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
     command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm
+    extensions: [gnome-3-28]
     plugs:
       - x11
       - unity7
@@ -76,12 +59,12 @@ layout:
 
 parts:
   scummvm:
-    after: [alsa-mixin, desktop-gtk, gtk-locales]
+    after: [alsa-mixin]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
       trimmed_tag="$(echo $last_committed_tag | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')"
-      last_released_tag="$(snap info scummvm | awk '$1 == "beta:" { print $2 }')"
+      last_released_tag="$(snap info scummvm | awk '$1 == "latest/beta:" { print $2 }')"
       # If the latest tag from the upstream project has not been released to
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
@@ -159,6 +142,7 @@ parts:
       - liba52-0.7.4
       - libieee1284-3
       - locales-all
+      - ttf-ubuntu-font-family
 
   alsa-mixin:
     plugin: nil
@@ -216,42 +200,6 @@ parts:
     stage-packages:
       - libasound2
       - libasound2-plugins
-
-  desktop-gtk:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: gtk
-    plugin: make
-    build-packages:
-      - build-essential
-
-    stage-packages:
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - locales-all
-      - xdg-user-dirs
-      - libcanberra-gtk3-module
-      - libgtk2.0-0
-      - libgdk-pixbuf2.0-0
-
-  gtk-locales:
-    plugin: nil
-    build-packages:
-      - apt
-      - dpkg
-    override-pull: |
-      set -eux
-      apt download "language-pack-gnome-*-base"
-    override-build: |
-      set -eux
-      for deb in *.deb; do dpkg-deb -x $deb .; done
-      find usr/share/locale-langpack -type f -not -name "gtk20*.mo" -and -not -name "gtk30*.mo" -exec rm '{}' \;
-      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share
-      cp -R usr/share/locale-langpack $SNAPCRAFT_PART_INSTALL/usr/share/
 
   scripts:
     plugin: dump
