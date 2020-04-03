@@ -24,11 +24,21 @@ grade: stable
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
+    extensions: [gnome-3-28]
     command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh
     plugs:
       - x11
       - unity7
+      - wayland
       - home
+      - opengl
+      - alsa
+      - audio-playback
+      - network
+      - network-bind
+      - removable-media
+      - gsettings
+      - mount-observe
 
   daemon:
     command: daemon-start.sh $SNAP/bin/scummvm-launch.sh -f
@@ -41,15 +51,6 @@ apps:
       LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/"
       PULSE_SYSTEM: 1
       PULSE_RUNTIME_PATH: /var/run/pulse
-
-plugs:
-  wayland:
-  opengl:
-  alsa:
-  audio-playback:
-  network:
-  network-bind:
-  removable-media:
 
 layout:
   /usr/share/glvnd/egl_vendor.d:
@@ -67,12 +68,12 @@ layout:
 
 parts:
   scummvm:
-    after: [alsa-mixin, desktop-glib-only]
+    after: [alsa-mixin]
     source: https://github.com/scummvm/scummvm.git
     override-build: |
       last_committed_tag="$(git tag --list | tac | head -n1)"
       trimmed_tag="$(echo $last_committed_tag | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')"
-      last_released_tag="$(snap info scummvm | awk '$1 == "beta:" { print $2 }')"
+      last_released_tag="$(snap info scummvm | awk '$1 == "latest/beta:" { print $2 }')"
       # If the latest tag from the upstream project has not been released to
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
@@ -99,6 +100,7 @@ parts:
       - g++
       - make
       - libsdl2-dev
+      - libgtk-3-dev
       - libjpeg62-dev
       - libmpeg2-4-dev
       - liba52-dev
@@ -149,6 +151,7 @@ parts:
       - liba52-0.7.4
       - libieee1284-3
       - locales-all
+      - ttf-ubuntu-font-family
 
   alsa-mixin:
     plugin: nil
@@ -206,15 +209,6 @@ parts:
     stage-packages:
       - libasound2
       - libasound2-plugins
-
-  desktop-glib-only:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: glib-only
-    plugin: make
-    build-packages:
-      - libglib2.0-dev
-    stage-packages:
-      - libglib2.0-bin
 
   scripts:
     plugin: dump
