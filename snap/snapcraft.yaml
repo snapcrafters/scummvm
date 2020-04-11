@@ -234,3 +234,7 @@ parts:
   drascula:
     plugin: dump
     source: http://archive.ubuntu.com/ubuntu/pool/universe/d/drascula/drascula_1.0+ds4-1_all.deb
+
+  drascula-music:
+    plugin: dump
+    source: http://archive.ubuntu.com/ubuntu/pool/universe/d/drascula/drascula-music_1.0+ds4-1_all.deb
