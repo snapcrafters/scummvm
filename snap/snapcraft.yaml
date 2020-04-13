@@ -227,7 +227,7 @@ parts:
     build-packages:
       - unzip
     override-pull: |
-      wget https://fr1.eu.scummvm.net/extras/games-bundle.zip
+      wget https://www.scummvm.org/frs/extras/games-bundle.zip
     override-build: |
       snapcraftctl build
       mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
