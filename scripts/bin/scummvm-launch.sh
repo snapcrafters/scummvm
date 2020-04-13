@@ -20,7 +20,7 @@ while [ ! -f "${XDG_CONFIG_HOME}/scummvm/.added-games-bundle" ]
 do
   mkdir -p ${XDG_CONFIG_HOME}/scummvm/
   touch ${XDG_CONFIG_HOME}/scummvm/.added-games-bundle
-  if ! grep -E "comi|drascula|dreamweb|lure|queen|sky|sword" ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
+  if ! grep -E "comi|drascula|dreamweb|lure|myst|queen|sky|sword" ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
   then
   # Register the bundled games. We use a "while" loop as we can't easily
   # tell when scummvm is finished.
