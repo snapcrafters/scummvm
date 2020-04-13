@@ -224,13 +224,16 @@ parts:
 
   games:
     plugin: nil
-    stage-packages:
-      - beneath-a-steel-sky
-      - flight-of-the-amazon-queen
-      - lure-of-the-temptress
-      # - drascula "WARNING: Incorrect version of the 'drascula.dat' engine data file found. Expected 5.0 but got 4.0.!"
+    build-packages:
+      - unzip
+    override-pull: |
+      wget https://fr1.eu.scummvm.net/extras/games-bundle.zip
+    override-build: |
+      snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
 
-  # drascula from 20.04
-  drascula:
-    plugin: dump
-    source: http://archive.ubuntu.com/ubuntu/pool/universe/d/drascula/drascula_1.0+ds4-1_all.deb
+      if ! echo "5c16f3db7fda3660d1bddb52e76aa27ada8eb8268872f5e045490f3eabb603e1 games-bundle.zip" | sha256sum -c -; then
+        echo "Detected corrupt games-bundle.zip, not including!"
+      else
+        unzip games-bundle.zip -d $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
+      fi
