@@ -223,17 +223,10 @@ parts:
     source: scripts
 
   games:
-    plugin: nil
-    build-packages:
-      - unzip
-    override-pull: |
-      wget https://www.scummvm.org/frs/extras/games-bundle.zip
+    plugin: dump
+    source: https://www.scummvm.org/frs/extras/games-bundle.zip
+    source-checksum: sha256/5c16f3db7fda3660d1bddb52e76aa27ada8eb8268872f5e045490f3eabb603e1
     override-build: |
       snapcraftctl build
       mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
-
-      if ! echo "5c16f3db7fda3660d1bddb52e76aa27ada8eb8268872f5e045490f3eabb603e1 games-bundle.zip" | sha256sum -c -; then
-        echo "Detected corrupt games-bundle.zip, not including!"
-      else
-        unzip games-bundle.zip -d $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
-      fi
+      mv $SNAPCRAFT_PART_INSTALL/games-bundle $SNAPCRAFT_PART_INSTALL/usr/share/scummvm/
