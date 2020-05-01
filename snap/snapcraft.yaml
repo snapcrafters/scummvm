@@ -113,6 +113,7 @@ parts:
       - libfaad-dev
       - libfluidsynth-dev
       - libfreetype6-dev
+      - libfribidi-dev
       - zlib1g-dev
       - libunity-dev
       - libcurl4-openssl-dev
@@ -124,6 +125,7 @@ parts:
       - libfaad2
       - libflac8
       - libfluidsynth1
+      - libfribidi0
       - libgl1-mesa-dri
       - libgl1-mesa-glx
       - libglu1-mesa
