@@ -21,6 +21,15 @@ description: |
 confinement: strict
 grade: stable
 
+plugs:
+  wayland:
+  opengl:
+  alsa:
+  audio-playback:
+  network:
+  network-bind:
+  removable-media:
+
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
@@ -29,14 +38,7 @@ apps:
     plugs:
       - x11
       - unity7
-      - wayland
       - home
-      - opengl
-      - alsa
-      - audio-playback
-      - network
-      - network-bind
-      - removable-media
       - gsettings
       - mount-observe
     environment:
