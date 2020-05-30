@@ -98,7 +98,7 @@ parts:
       - --enable-tts
       - --enable-opl2lpt
       - --enable-c++11
-      - --enable-test-cpp11
+      - --enable-test-c++11
       - --disable-debug
 
     build-packages:
