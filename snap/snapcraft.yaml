@@ -21,6 +21,7 @@ description: |
 confinement: strict
 grade: stable
 
+# **Workaround** The following are duplicated for "daemon" (putting them at the top level doesn't work in *this* snap)
 plugs:
   wayland:
   opengl:
@@ -52,6 +53,14 @@ apps:
     restart-condition: always
     plugs:
       - pulseaudio
+      # **Workaround** The following are duplicated for "daemon" (putting them at the top level doesn't work in *this* snap)
+      - wayland
+      - opengl
+      - alsa
+      - audio-playback
+      - network
+      - network-bind
+      - removable-media
     environment:
       SDL_VIDEODRIVER: wayland
       LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
