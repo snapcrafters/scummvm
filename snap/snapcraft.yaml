@@ -37,8 +37,16 @@ apps:
     extensions: [gnome-3-28]
     command: desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh
     plugs:
+      - wayland
       - x11
+      - opengl
       - unity7
+      - pulseaudio
+      - alsa
+      - audio-playback
+      - network
+      - network-bind
+      - removable-media
       - home
       - gsettings
       - mount-observe
