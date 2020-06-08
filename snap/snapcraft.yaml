@@ -21,16 +21,6 @@ description: |
 confinement: strict
 grade: stable
 
-# **Workaround** The following are duplicated for "daemon" (putting them at the top level doesn't work in *this* snap)
-plugs:
-  wayland:
-  opengl:
-  alsa:
-  audio-playback:
-  network:
-  network-bind:
-  removable-media:
-
 apps:
   scummvm:
     command-chain: ["snap/command-chain/alsa-launch"]
@@ -61,7 +51,6 @@ apps:
     restart-condition: always
     plugs:
       - pulseaudio
-      # **Workaround** The following are duplicated for "daemon" (putting them at the top level doesn't work in *this* snap)
       - wayland
       - opengl
       - alsa
