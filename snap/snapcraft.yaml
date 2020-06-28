@@ -244,7 +244,7 @@ parts:
 
   games:
     plugin: dump
-    source: https://www.scummvm.org/frs/extras/storefront/games-bundle.zip
+    source: https://fr1.eu.scummvm.net/extras/storefront/games-bundle.zip
     source-checksum: sha256/5c16f3db7fda3660d1bddb52e76aa27ada8eb8268872f5e045490f3eabb603e1
     organize:
       games-bundle: usr/share/scummvm/
