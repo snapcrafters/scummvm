@@ -105,7 +105,12 @@ parts:
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
         git fetch
-        git checkout "${last_committed_tag}"
+
+        # FIXME: Enforce removal of 'devtools/create_prince' in order to
+        #        work around file collisions caused by the recent migration
+        #        of the devtools to a submodule.
+        rm -rf ../src/devtools/create_prince/
+        git checkout -f "${last_committed_tag}"
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
         snapcraftctl set-version $(git -C ../src describe | sed 's/desc\///')
