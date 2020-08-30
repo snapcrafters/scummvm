@@ -113,6 +113,8 @@ parts:
         git checkout -f "${last_committed_tag}"
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
+        git -C ../src fetch
+        git -C ../src checkout branch-2-2
         snapcraftctl set-version $(git -C ../src describe | sed 's/desc\///')
       fi    
       snapcraftctl build
