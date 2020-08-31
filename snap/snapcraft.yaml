@@ -52,6 +52,7 @@ apps:
       - gsettings
       - mount-observe
       - system-observe
+      - network-observe
       - joystick
     environment:
       LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
@@ -114,9 +115,9 @@ parts:
         git checkout -f "${last_committed_tag}"
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
-        git -C ../src fetch
+        git fetch
         git checkout -f branch-2-2
-        snapcraftctl set-version $(git -C ../src describe | sed 's/desc\///')
+        snapcraftctl set-version $(git describe branch-2-2 | sed 's/desc\///')
       fi    
       snapcraftctl build
       
