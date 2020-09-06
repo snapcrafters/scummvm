@@ -17,7 +17,8 @@ $SNAP/usr/bin/speech-dispatcher -d -C "$SNAP/etc/speech-dispatcher" -S "$XDG_RUN
 # Initial setup
 if [ ! -f "${XDG_CONFIG_HOME}/scummvm/scummvm.ini" ]; then
   mkdir -p ${XDG_CONFIG_HOME}/scummvm/
-  echo "[scummvm]\naspect_ratio=true" > ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
+  echo "[scummvm]\naspect_ratio=true\n"                                             >> ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
+  echo "[cloud]\nrootpath=/home/${USER}/snap/scummvm/current/.local/share/scummvm"  >> ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
 fi
 
 # We need to do this for the user that launches scummvm, so
