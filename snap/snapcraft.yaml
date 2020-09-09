@@ -97,6 +97,7 @@ layout:
 
 parts:
   scummvm:
+    plugin: nil
     after: [alsa-mixin, discord-rpc]
     source: https://github.com/scummvm/scummvm.git
     build-environment:
@@ -123,17 +124,23 @@ parts:
         git checkout -f branch-2-2
         snapcraftctl set-version $(git describe branch-2-2 | sed 's/desc\///')
       fi
+
+      sed -i 's/ar cru/ar cr/g' $SNAPCRAFT_PART_SRC/configure
+
+      cd $SNAPCRAFT_PART_SRC
+      ./configure --prefix=$SNAPCRAFT_PART_INSTALL \
+                  --enable-release \
+                  --enable-tts \
+                  --enable-opl2lpt \
+                  --enable-discord \
+                  --enable-c++11 \
+                  --disable-debug
+
+      make -j$(nproc)
+      make install
+
       snapcraftctl build
       strip --strip-all $SNAPCRAFT_PART_INSTALL/bin/scummvm
-      
-    plugin: autotools
-    configflags:
-      - --enable-release
-      - --enable-tts
-      - --enable-opl2lpt
-      - --enable-discord
-      - --enable-c++11
-      - --disable-debug
 
     build-packages:
       - libsdl2-dev
