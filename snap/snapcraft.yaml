@@ -111,17 +111,10 @@ parts:
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
         git fetch
-
-        # FIXME: Enforce removal of 'devtools/create_prince' in order to
-        #        work around file collisions caused by the recent migration
-        #        of the devtools to a submodule.
-        rm -rf ../src/devtools/create_prince/
         git checkout -f "${last_committed_tag}"
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
-        git fetch
-        git checkout -f branch-2-2
-        snapcraftctl set-version $(git describe branch-2-2 | sed 's/desc\///')
+        snapcraftctl set-version $(git describe | sed 's/desc\///')
       fi
       snapcraftctl build
       strip --strip-all $SNAPCRAFT_PART_INSTALL/bin/scummvm
@@ -268,7 +261,7 @@ parts:
 
   games:
     plugin: dump
-    source: https://fr1.eu.scummvm.net/extras/storefront/games-bundle.zip
+    source: https://www.scummvm.org/frs/extras/storefront/games-bundle.zip
     source-checksum: sha256/5c16f3db7fda3660d1bddb52e76aa27ada8eb8268872f5e045490f3eabb603e1
     organize:
       games-bundle: usr/share/scummvm/
