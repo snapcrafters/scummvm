@@ -136,6 +136,7 @@ parts:
       - libfluidsynth-dev
       - libfreetype6-dev
       - libfribidi-dev
+      - libglew-dev
       - libgtk-3-dev
       - libieee1284-3-dev
       - libjpeg62-dev
@@ -165,10 +166,10 @@ parts:
       - libfribidi0
       - libgl1-mesa-dri
       - libgl1-mesa-glx
+      - libglew2.0
       - libglu1-mesa
       - libicu60
       - libieee1284-3
-      - libjpeg62
       - libjpeg8
       - libmad0
       - libmpeg2-4
