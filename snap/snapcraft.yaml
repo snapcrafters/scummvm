@@ -170,6 +170,7 @@ parts:
       - libglu1-mesa
       - libicu60
       - libieee1284-3
+      - libjpeg62
       - libjpeg8
       - libmad0
       - libmpeg2-4
