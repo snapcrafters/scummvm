@@ -97,7 +97,7 @@ layout:
 
 parts:
   scummvm:
-    after: [alsa-mixin, discord-rpc]
+    after: [alsa-mixin]
     source: https://github.com/scummvm/scummvm.git
     build-environment:
       - CXXFLAGS: "$CXXFLAGS -fuse-ld=gold -flto=$(nproc) -ffunction-sections -fdata-sections"
@@ -252,13 +252,7 @@ parts:
     stage-packages:
       - libasound2
       - libasound2-plugins
-
-  discord-rpc:
-    plugin: cmake
-    source: https://github.com/discord/discord-rpc.git
-    configflags:
-      - -DBUILD_SHARED_LIBS=ON
-
+  
   scripts:
     plugin: dump
     source: scripts
