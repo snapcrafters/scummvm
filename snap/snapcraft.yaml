@@ -109,11 +109,12 @@ parts:
       last_released_tag="$(snap info scummvm | awk '$1 == "latest/beta:" { print $2 }')"
       # If the latest tag from the upstream project has not been released to
       # beta, build that tag instead of master.
-      if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
+      if [ "${trimmed_tag}" != "${last_released_tag}" ] && [ "${trimmed_tag}" != "2.2.1-android" ]; then
         git fetch
         git checkout -f "${last_committed_tag}"
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
+        git checkout master
         snapcraftctl set-version $(git describe | sed 's/desc\///')
       fi
       snapcraftctl build
