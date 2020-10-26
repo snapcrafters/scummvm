@@ -125,8 +125,6 @@ parts:
       - --enable-release
       - --enable-tts
       - --enable-opl2lpt
-      - --enable-discord
-      - --enable-c++11
       - --disable-debug
 
     build-packages:
