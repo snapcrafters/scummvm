@@ -99,7 +99,7 @@ parts:
       # beta, build that tag instead of master.
       if [ "${trimmed_tag}" != "${last_released_tag}" ] && [ "${trimmed_tag}" != "2.2.1-android" ]; then
         git fetch
-        git checkout -f "${last_committed_tag}"
+        git checkout -f v2.2.0
         snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
       else
         git checkout master
