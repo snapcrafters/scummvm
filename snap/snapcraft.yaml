@@ -98,9 +98,11 @@ parts:
       # If the latest tag from the upstream project has not been released to
       # beta, build that tag instead of master.
       #if [ "${trimmed_tag}" != "${last_released_tag}" ]; then
-      #  git fetch
+        git fetch
+        # git checkout -f "${last_committed_tag}"
         git checkout -f v2.2.0
-        snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
+        # snapcraftctl set-version $(git -C ../src tag --list | tac | head -n1 | sed 's/desc\///' | sed 's/git//' | sed 's/^v//')
+        snapcraftctl set-version 2.2.0
       #else
       #  git checkout master
       #  snapcraftctl set-version $(git describe | sed 's/desc\///')
