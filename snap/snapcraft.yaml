@@ -20,7 +20,6 @@ description: |
     you will find some really obscure adventures and truly hidden gems to explore.
 confinement: strict
 grade: stable
-compression: lzo
 
 apps:
   scummvm:
