@@ -65,7 +65,7 @@ apps:
       - joystick
     environment:
       SDL_VIDEODRIVER: wayland
-      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
       ESPEAK_DATA_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/espeak-ng-data"
       PULSE_SYSTEM: 1
       PULSE_RUNTIME_PATH: /var/run/pulse
