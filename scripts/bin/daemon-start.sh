@@ -1,13 +1,5 @@
 #!/bin/sh
 
-if [ "$(id -u)" = "0" ]  && [ "$(snapctl get daemon)" = "false" ]
-then
-  # If not configured to run as a daemon we have to stop here
-  # (There's no "snapctl disable ...")
-  snapctl stop $SNAP_NAME.daemon
-  exit 0
-fi
-
 mkdir -p "$XDG_RUNTIME_DIR" -m 700
 
 if [ -z "${WAYLAND_DISPLAY}" ]
