@@ -43,6 +43,7 @@ apps:
       - mount-observe
       - system-observe
       - network-observe
+      - hardware-observe
       - joystick
     environment:
       LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
@@ -63,10 +64,10 @@ apps:
       - network-bind
       - removable-media
       - joystick
-      - unity7
       - mount-observe
       - system-observe
       - network-observe
+      - hardware-observe
     environment:
       SDL_VIDEODRIVER: wayland
       LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
