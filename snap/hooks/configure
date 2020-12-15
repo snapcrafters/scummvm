@@ -10,11 +10,7 @@ then
 fi
 
 if [ "$(snapctl get daemon)" = "true" ]; then
-  if snapctl services ${SNAP_NAME}.daemon | grep -q inactive; then
-    snapctl start --enable $SNAP_NAME.daemon 2>&1 || true
-  fi
+  snapctl start --enable $SNAP_NAME.daemon 2>&1 || true
 else
-  if snapctl services ${SNAP_NAME}.daemon | grep -q enabled; then
-    snapctl stop --disable $SNAP_NAME.daemon 2>&1 || true
-  fi
+  snapctl stop --disable $SNAP_NAME.daemon 2>&1 || true
 fi
