@@ -32,8 +32,6 @@ apps:
       - x11
       - opengl
       - unity7
-      - pulseaudio
-      - alsa
       - audio-playback
       - network
       - network-bind
@@ -55,10 +53,8 @@ apps:
     daemon: simple
     restart-condition: always
     plugs:
-      - pulseaudio
       - wayland
       - opengl
-      - alsa
       - audio-playback
       - network
       - network-bind
