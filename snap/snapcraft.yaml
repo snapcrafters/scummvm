@@ -88,6 +88,8 @@ layout:
     bind: $SNAP/usr/share/applications
   /usr/share/alsa:
     bind: $SNAP/usr/share/alsa
+  /usr/share/libdrm:
+    bind: $SNAP/usr/share/libdrm
 
 parts:
   scummvm:
