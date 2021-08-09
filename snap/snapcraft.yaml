@@ -24,9 +24,12 @@ compression: lzo
 
 apps:
   scummvm:
-    command-chain: ["snap/command-chain/alsa-launch"]
+    command-chain:
+      - snap/command-chain/alsa-launch
+      - snap/command-chain/desktop-launch
+      - bin/wayland-if-possible.sh
+    command: bin/scummvm-launch.sh
     extensions: [gnome-3-28]
-    command: snap/command-chain/desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh
     plugs:
       - wayland
       - x11
@@ -49,7 +52,11 @@ apps:
       DBUS_FATAL_WARNINGS: 0
 
   daemon:
-    command: bin/daemon-start.sh $SNAP/snap/command-chain/desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh -f
+    command-chain:
+      - bin/daemon-start.sh
+      - snap/command-chain/desktop-launch
+      - bin/wayland-if-possible.sh
+    command: bin/scummvm-launch.sh -f
     daemon: simple
     restart-condition: always
     plugs:
