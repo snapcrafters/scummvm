@@ -26,7 +26,6 @@ apps:
   scummvm:
     command-chain:
       - snap/command-chain/alsa-launch
-      - snap/command-chain/desktop-launch
       - bin/wayland-if-possible.sh
     command: bin/scummvm-launch.sh
     extensions: [gnome-3-28]

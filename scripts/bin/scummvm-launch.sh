@@ -10,7 +10,11 @@ then
   fi
 fi
 
-if ! snapctl is-connected audio-playback; then
+if snapctl is-connected audio-playback; then
+  # Hook up speech-dispatcher
+  mkdir -p $XDG_RUNTIME_DIR/speech-dispatcher
+  $SNAP/usr/bin/speech-dispatcher -d -C "$SNAP/etc/speech-dispatcher" -S "$XDG_RUNTIME_DIR/speech-dispatcher/speechd.sock" -m "$SNAP/usr/lib/speech-dispatcher-modules" -t 30
+else
   echo "WARNING: audio-playback interface not connected, speech and audio will not work."
 fi
 
