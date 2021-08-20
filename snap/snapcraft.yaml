@@ -93,6 +93,8 @@ layout:
     bind: $SNAP/usr/share/alsa
   /usr/share/libdrm:
     bind: $SNAP/usr/share/libdrm
+  /usr/share/drirc.d:
+    bind: $SNAP/usr/share/drirc.d
 
 parts:
   scummvm:
