@@ -24,16 +24,16 @@ compression: lzo
 
 apps:
   scummvm:
-    command-chain: ["snap/command-chain/alsa-launch"]
+    command-chain:
+      - snap/command-chain/alsa-launch
+      - bin/wayland-if-possible.sh
+    command: bin/scummvm-launch.sh
     extensions: [gnome-3-28]
-    command: snap/command-chain/desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh
     plugs:
       - wayland
       - x11
       - opengl
       - unity7
-      - pulseaudio
-      - alsa
       - audio-playback
       - network
       - network-bind
@@ -46,19 +46,21 @@ apps:
       - hardware-observe
       - joystick
     environment:
-      LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
       ESPEAK_DATA_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/espeak-ng-data"
       DBUS_FATAL_WARNINGS: 0
 
   daemon:
-    command: bin/daemon-start.sh $SNAP/snap/command-chain/desktop-launch $SNAP/bin/wayland-if-possible.sh $SNAP/bin/scummvm-launch.sh -f
+    command-chain:
+      - bin/daemon-start.sh
+      - snap/command-chain/desktop-launch
+      - bin/wayland-if-possible.sh
+    command: bin/scummvm-launch.sh -f
     daemon: simple
     restart-condition: always
     plugs:
-      - pulseaudio
       - wayland
       - opengl
-      - alsa
       - audio-playback
       - network
       - network-bind
@@ -70,7 +72,7 @@ apps:
       - hardware-observe
     environment:
       SDL_VIDEODRIVER: wayland
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libunity/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/speech-dispatcher/"
       ESPEAK_DATA_PATH: "$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/espeak-ng-data"
       PULSE_SYSTEM: 1
       PULSE_RUNTIME_PATH: /var/run/pulse
@@ -88,6 +90,10 @@ layout:
     bind: $SNAP/usr/share/applications
   /usr/share/alsa:
     bind: $SNAP/usr/share/alsa
+  /usr/share/libdrm:
+    bind: $SNAP/usr/share/libdrm
+  /usr/share/drirc.d:
+    bind: $SNAP/usr/share/drirc.d
 
 parts:
   scummvm:
