@@ -1,5 +1,5 @@
 name: scummvm
-base: core18
+base: core20
 license: GPL-2.0
 adopt-info: scummvm
 summary: ScummVM
@@ -28,13 +28,14 @@ apps:
       - snap/command-chain/alsa-launch
       - bin/wayland-if-possible.sh
     command: bin/scummvm-launch.sh
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     plugs:
       - wayland
       - x11
       - opengl
       - unity7
       - audio-playback
+      - alsa
       - network
       - network-bind
       - removable-media
@@ -62,6 +63,7 @@ apps:
       - wayland
       - opengl
       - audio-playback
+      - alsa
       - network
       - network-bind
       - removable-media
@@ -99,9 +101,9 @@ parts:
   scummvm:
     after: [alsa-mixin]
     source: https://github.com/scummvm/scummvm.git
-    build-environment:
-      - CXXFLAGS: "$CXXFLAGS -fuse-ld=gold -flto=$(nproc) -ffunction-sections -fdata-sections"
-      - LDFLAGS:  "$LDFLAGS  -fuse-ld=gold -flto=$(nproc) -Wl,--gc-sections"
+    #build-environment:
+    #  - CXXFLAGS: "$CXXFLAGS -fuse-ld=gold -flto=$(nproc) -ffunction-sections -fdata-sections"
+    #  - LDFLAGS:  "$LDFLAGS  -fuse-ld=gold -flto=$(nproc) -Wl,--gc-sections"
 
     override-build: |
       last_committed_tag="$(git tag --list | sed '/android\|docs/d' | tac | head -n1)"
@@ -118,10 +120,10 @@ parts:
         snapcraftctl set-version $(git describe | sed 's/desc\///')
       fi
       snapcraftctl build
-      strip --strip-all $SNAPCRAFT_PART_INSTALL/bin/scummvm
+      strip --strip-all $SNAPCRAFT_PART_INSTALL/usr/local/bin/scummvm
       
     plugin: autotools
-    configflags:
+    autotools-configure-parameters:
       - --enable-release
       - --enable-tts
       - --enable-opl2lpt
@@ -131,6 +133,7 @@ parts:
       - liba52-0.7.4-dev
       - libcurl4-openssl-dev
       - libfaad-dev
+      - libffi-dev
       - libflac-dev
       - libfluidsynth-dev
       - libfreetype6-dev
@@ -139,13 +142,14 @@ parts:
       - libglew-dev
       - libgtk-3-dev
       - libieee1284-3-dev
-      - libjpeg62-dev
+      - libjpeg-dev
       - libmad0-dev
       - libmpeg2-4-dev
       - libogg-dev
       - libpng-dev
       - libsdl2-dev
       - libsdl2-net-dev
+      - libsndio-dev
       - libspeechd-dev
       - libtheora-dev
       - libunity-dev
@@ -161,15 +165,16 @@ parts:
       - libdbusmenu-glib4
       - libdee-1.0-4
       - libfaad2
+      - libffi7
       - libflac8
-      - libfluidsynth1
+      - libfluidsynth2
       - libfribidi0
       - libgif7
       - libgl1-mesa-dri
       - libgl1-mesa-glx
-      - libglew2.0
+      - libglew2.1
       - libglu1-mesa
-      - libicu60
+      - libicu66
       - libieee1284-3
       - libjpeg62
       - libjpeg8
@@ -181,7 +186,7 @@ parts:
       - libsdl2-2.0-0
       - libsdl2-net-2.0-0
       - libslang2
-      - libsndio6.1
+      - libsndio7.0
       - libspeechd2
       - libtheora0
       - libunity9

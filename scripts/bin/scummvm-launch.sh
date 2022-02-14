@@ -34,8 +34,8 @@ if [ ! -f "${XDG_CONFIG_HOME}/scummvm/.added-games-bundle" ]; then
   if ! grep -E "comi|drascula|dreamweb|lure|myst|queen|sky|sword" ${XDG_CONFIG_HOME}/scummvm/scummvm.ini
   then
   # Register the bundled games.
-  $SNAP/bin/scummvm -p /usr/share/scummvm/ --recursive --add
+  $SNAP/usr/local/bin/scummvm -p /usr/share/scummvm/ --recursive --add
   fi
 fi
 
-exec $SNAP/bin/scummvm "$@"
+exec $SNAP/usr/local/bin/scummvm "$@"
