@@ -101,9 +101,6 @@ parts:
   scummvm:
     after: [alsa-mixin]
     source: https://github.com/scummvm/scummvm.git
-    #build-environment:
-    #  - CXXFLAGS: "$CXXFLAGS -fuse-ld=gold -flto=$(nproc) -ffunction-sections -fdata-sections"
-    #  - LDFLAGS:  "$LDFLAGS  -fuse-ld=gold -flto=$(nproc) -Wl,--gc-sections"
 
     override-build: |
       last_committed_tag="$(git tag --list | sed '/android\|docs/d' | tac | head -n1)"
@@ -131,6 +128,7 @@ parts:
 
     build-packages:
       - liba52-0.7.4-dev
+      - libaudio-dev
       - libcurl4-openssl-dev
       - libfaad-dev
       - libffi-dev
@@ -161,6 +159,7 @@ parts:
       - espeak-ng-data
       - freeglut3
       - liba52-0.7.4
+      - libaudio2
       - libcurl4
       - libdbusmenu-glib4
       - libdee-1.0-4
