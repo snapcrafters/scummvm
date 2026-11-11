@@ -110,7 +110,6 @@ parts:
       - zlib1g-dev
     stage-packages:
       - fonts-ubuntu
-      - inotify-tools
       - liba52-0.7.4
       - libasound2-plugins
       - libcurl4t64
