@@ -1,7 +1,7 @@
 name: scummvm
 base: core26
 version: "2026.4.0"
-license: GPL-2.0
+license: GPL-3.0-or-later
 summary: ScummVM
 description: |
   ScummVM allows you to run classic graphical adventure games and RPGs,
