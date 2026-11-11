@@ -23,7 +23,6 @@ platforms:
 apps:
   scummvm:
     extensions: [gnome]
-    command-chain: [bin/wayland-if-possible.sh]
     command: bin/scummvm-launch.sh
     plugs:
       - unity7
@@ -38,6 +37,7 @@ apps:
     environment:
       ALSA_CONFIG_PATH: $SNAP/etc/asound.conf
       ALSA_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
+      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor/plugins-1
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libunity:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pulseaudio:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/speech-dispatcher
       ESPEAK_DATA_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/espeak-ng-data
       DBUS_FATAL_WARNINGS: "0"
@@ -46,7 +46,6 @@ apps:
     extensions: [gnome]
     command-chain:
       - bin/daemon-start.sh
-      - bin/wayland-if-possible.sh
     command: bin/scummvm-launch.sh -f
     daemon: simple
     restart-condition: always
@@ -61,6 +60,7 @@ apps:
       SDL_VIDEODRIVER: wayland
       ALSA_CONFIG_PATH: $SNAP/etc/asound.conf
       ALSA_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
+      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor/plugins-1
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libunity:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pulseaudio:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/speech-dispatcher
       ESPEAK_DATA_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/espeak-ng-data
       PULSE_SYSTEM: "1"
@@ -142,6 +142,7 @@ parts:
   scripts:
     plugin: dump
     source: scripts
+    stage-packages: [libdecor-0-plugin-1-gtk]
 
   games:
     plugin: dump

@@ -25,6 +25,15 @@ Launch ScummVM from your desktop's application menu or run `scummvm`.
 
 ## Snap configuration
 
+### Display backend
+
+The GNOME and GPU extensions provide desktop and graphics integration. SDL selects the desktop video backend; this snap does not force X11 on GNOME. Native Wayland window decorations are supplied by libdecor's GTK plugin. To select a backend explicitly for troubleshooting:
+
+    SDL_VIDEODRIVER=x11 scummvm
+    SDL_VIDEODRIVER=wayland scummvm
+
+The Wayland path requires the `wayland` interface to be connected and a running Wayland session. The kiosk daemon explicitly uses Wayland.
+
 ### Games and device access
 
 The snap includes a games bundle, which the launcher registers on first use unless it detects an existing selection of games. To play other supported games, you must supply their original data files and add them through ScummVM's game launcher.
